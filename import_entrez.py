@@ -36,7 +36,7 @@ def open_entrez_id_file(file):
 
 
 def save_to_csv_file(cleaned_data):
-    with open('Entrez_id.csv', 'w') as outfile:
+    with open('../entrez_id.csv', 'w') as outfile:
         header = "entrez_id, uniprot_id, gene_name, description"
         outfile.write(header)
         outfile.write('\n')
@@ -51,7 +51,7 @@ def save_to_csv_file(cleaned_data):
 
 #---- Main --------------------------------------------------------------------
 
-file_path = '../Entrez_copy'
+file_path = '../entrez_id_uniprot_mapping'
 data = open_entrez_id_file(file_path)
 csv_data = convert_data_to_csv_format(data)
 save_to_csv_file(csv_data)
