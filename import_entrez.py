@@ -17,13 +17,13 @@ def convert_data_to_csv_format(data):
             gene_name[0] = gene_name[0].lstrip()
             gene_name[0] = re.sub(r',', '', gene_name[0])
             gene_name[1] = gene_name[1][:-2]
-            new_line = [ids[0], ids[1], gene_name[1], gene_name[0]]
+            new_line = [ids[0],ids[1],gene_name[1],gene_name[0]]
             csv_data.append(new_line)
     return csv_data
 
 
 def is_begining_of_entrez_id(line):
-    return bool(re.compile(r'[0-9]').match(line[0][:5]))
+    return bool(re.compile(r'[0-9]').match(line[0][0]))
 
 
 def open_entrez_id_file(file):
@@ -37,7 +37,7 @@ def open_entrez_id_file(file):
 
 def save_to_csv_file(cleaned_data):
     with open('../entrez_id.csv', 'w') as outfile:
-        header = "entrez_id, uniprot_id, gene_name, description"
+        header = "entrez_id,uniprot_id,gene_name,description"
         outfile.write(header)
         outfile.write('\n')
         for line in cleaned_data:
@@ -45,7 +45,7 @@ def save_to_csv_file(cleaned_data):
                 if word == line[-1]:
                     outfile.write(word)
                 else:
-                    outfile.write(word + ", ")
+                    outfile.write(word + ",")
             outfile.write('\n')
 
 
