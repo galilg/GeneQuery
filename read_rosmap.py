@@ -58,42 +58,24 @@ def create_table(headers, keyspace_name, table_name):
 
 
 def get_insert_db_line(row):
-    ##import pdb;
-    ##pdb.set_trace()
     line_to_insert = []
     line_to_insert.append(row[0])
     for item in enumerate(row[1:]):
         line_to_insert.append(item[1])
-    ##pdb.set_trace()
     return line_to_insert
-    #line_to_insert = str(row[0]) + ', '
-    #for item in enumerate(row[1:-1]):
-    #    line_to_insert += str(item[1]) + ', '
-    #line_to_insert += str(row[-1])
-    #return line_to_insert
 
 
 def populate_table(headers_without_types, keyspace_name, rosmap, table_name):
     cluster = Cluster()
     session = cluster.connect(keyspace_name)
     headers_without_types = ', '.join(headers_without_types)
-    #import pdb; #pdb.set_trace()
-    for entry in enumerate(rosmap[1:]):
-        insert_line = get_insert_db_line(rosmap.loc[entry[0]])
-        #import pdb
-        print(entry[0])
+    #import pdb; pdb.set_trace()
+    for entry in range(1, len(rosmap.index)):
+        insert_line = get_insert_db_line(rosmap.loc[entry])
         line = ', '.join(str(v) for v in insert_line)
         patient_id = "'"+line[0:11] +"'"
         line = line[11:]
         concat = patient_id + line
-        #pdb.set_trace()
-        print("""INSERT INTO {}({})
-                 VALUES ({}{})
-              """.format(table_name,
-                         headers_without_types,
-                         patient_id,
-                         concat)
-             )
         session.execute("""
                         INSERT INTO {}({})
                         VALUES ({}{})
