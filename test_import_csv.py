@@ -19,7 +19,7 @@ cluster = Cluster()
 session = cluster.connect('test_space')
 #session.execute("""
 #                CREATE TABLE IF NOT EXISTS test_table
-import pdb; pdb.set_trace()
+#import pdb; pdb.set_trace()
 for line in clean_data[1:]:
     #print("The line: ", line)
     session.execute("""
