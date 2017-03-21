@@ -2,12 +2,13 @@
 
 #---- Imports -----------------------------------------------------------------
 
+from cassandra.cluster import Cluster
+
 import csv
-import pandas as pd
 import math
 import numpy as np
+import pandas as pd
 
-from cassandra.cluster import Cluster
 
 #---- Functions ---------------------------------------------------------------
 
@@ -20,6 +21,14 @@ def create_cql_keyspace(keyspace_name):
                                                'replication_factor': 3}};
                           """ .format(keyspace_name))
 
+
+def create_table(headers, keyspace_name, table_name):
+    cluster = Cluster()
+    session = cluster.connect(keyspace_name)
+    headers = ', '.join(headers)
+    session.execute("""
+                    CREATE TABLE IF NOT EXISTS {} ({});
+                    """.format(table_name, headers))
 
 
 def get_headers(rosmap):
@@ -39,21 +48,6 @@ def get_headers(rosmap):
     return (headers_with_types, headers_without_types)
 
 
-def load_data_file(file):
-    rosmap =  pd.read_csv(file)
-    rosmap = rosmap.replace(np.nan, -1.0)
-    return rosmap
-
-
-def create_table(headers, keyspace_name, table_name):
-    cluster = Cluster()
-    session = cluster.connect(keyspace_name)
-    headers = ', '.join(headers)
-    session.execute("""
-                    CREATE TABLE IF NOT EXISTS {} ({});
-                    """.format(table_name, headers))
-
-
 def get_insert_db_line(row):
     line_to_insert = []
     line_to_insert.append(row[0])
@@ -62,12 +56,18 @@ def get_insert_db_line(row):
     return line_to_insert
 
 
+def load_data_file(file):
+    rosmap =  pd.read_csv(file)
+    rosmap = rosmap.replace(np.nan, -1.0)
+    return rosmap
+
+
 def populate_table(headers_without_types, keyspace_name, rosmap, table_name):
     cluster = Cluster()
     session = cluster.connect(keyspace_name)
     headers_without_types = ', '.join(headers_without_types)
     #import pdb; pdb.set_trace()
-    for entry in range(1, len(rosmap.index)):
+    for entry in range(0, len(rosmap.index)):
         insert_line = get_insert_db_line(rosmap.loc[entry])
         line = ', '.join(str(v) for v in insert_line)
         patient_id = "'"+line[0:11] +"'"
@@ -75,10 +75,9 @@ def populate_table(headers_without_types, keyspace_name, rosmap, table_name):
         concat = patient_id + line
         session.execute("""
                         INSERT INTO {}({})
-                        VALUES ({}{})
+                        VALUES ({})
                         """.format(table_name,
                                    headers_without_types,
-                                   patient_id,
                                    concat)
                         )
 
