@@ -36,9 +36,6 @@ def get_headers(rosmap):
     for vals in header_values:
         headers_without_types.append('entrez_id_' + str(vals))
         headers_with_types.append('entrez_id_' + str(vals) + ' double')
-    #headers_without_type('entrez_id_' + str(header_values[-1]))
-    #headers_with_types += (', entrez_id_' + str(header_values[-1]) + ' double')
-    #import pdb; #pdb.set_trace()
     return (headers_with_types, headers_without_types)
 
 
@@ -94,8 +91,5 @@ table_name = 'patient_diagnosis'
 rosmap = load_data_file(file)
 headers_with_types, headers_without_types = get_headers(rosmap)
 create_cql_keyspace(keyspace_name)
-#import pdb; #pdb.set_trace()
 create_table(headers_with_types, keyspace_name, table_name)
 populate_table(headers_without_types, keyspace_name, rosmap, table_name)
-
-
