@@ -26,15 +26,20 @@ def get_headers(rosmap):
     import pdb; pdb.set_trace()
     header_values = list(rosmap.columns.values)
     header_values = header_values[2:]
-    headers_with_types = 'PATIENT_ID text PRIMARY KEY, DIAGNOSIS double'
-    headers_without_types = 'PATIENT_ID, DIAGNOSIS'
+    headers_with_types = []
+    headers_without_types = []
+    headers_with_types.append('PATIENT_ID text PRIMARY KEY')
+    headers_with_types.append('DIAGNOSIS double')
+    headers_without_types.append('PATIENT_ID')
+    headers_without_types.append('DIAGNOSIS')
 
-    for vals in header_values[:-1]:
-        headers_without_types += (', ' + 'Entrez_id_' + str(vals))
-        headers_with_types += (', ' + 'Entrez_id_' + str(vals) + ' double')
-    headers_without_types += ('Entrez_id_' + str(header_values[-1]))
-    headers_with_types += (', Entrez_id_' + str(header_values[-1]) + ' double')
-    return headers_with_types, headers_without_types
+    for vals in header_values:
+        headers_without_types.appens('Entrez_id_' + str(vals))
+        headers_with_types.append('Entrez_id_' + str(vals) + ' double')
+    #headers_without_type('Entrez_id_' + str(header_values[-1]))
+    #headers_with_types += (', Entrez_id_' + str(header_values[-1]) + ' double')
+    import pdb; pdb.set_trace()
+    return (headers_with_types, headers_without_types)
 
 
 def load_data_file(file):
@@ -52,13 +57,13 @@ def create_table(headers, keyspace_name, table_name):
 
 
 def get_insert_db_line(row):
-    import pdb;
-    pdb.set_trace()
+    #import pdb;
+    #pdb.set_trace()
     line_to_insert = []
     line_to_insert.append(row[0])
     for item in enumerate(row[1:]):
         line_to_insert.append(item[1])
-    pdb.set_trace()
+    #pdb.set_trace()
     return line_to_insert
     #line_to_insert = str(row[0]) + ', '
     #for item in enumerate(row[1:-1]):
@@ -71,7 +76,7 @@ def populate_table(headers_without_types, keyspace_name, rosmap, table_name):
     cluster = Cluster()
     session = cluster.connect(keyspace_name)
 
-    import pdb; pdb.set_trace()
+    #import pdb; pdb.set_trace()
     for entry in enumerate(rosmap):
         insert_line = get_insert_db_line(rosmap.loc[entry[0]])
         #pdb.set_trace()
