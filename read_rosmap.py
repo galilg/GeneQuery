@@ -72,13 +72,13 @@ def populate_table(headers_without_types, keyspace_name, rosmap, table_name):
         line = ', '.join(str(v) for v in insert_line)
         patient_id = "'"+line[0:11] +"'"
         line = line[11:]
-        concat = patient_id + line
+        data_to_insert = patient_id + line
         session.execute("""
                         INSERT INTO {}({})
                         VALUES ({})
                         """.format(table_name,
                                    headers_without_types,
-                                   concat)
+                                   data_to_insert)
                         )
 
 
