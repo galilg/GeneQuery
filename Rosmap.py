@@ -3,6 +3,7 @@
 #---- Imports -----------------------------------------------------------------
 
 from cassandra.cluster import Cluster
+from cassandra.query import tuple_factory
 
 import csv
 import math
@@ -24,25 +25,21 @@ class Rosmap(object):
                  table_name = 'patient_diagnosis'
                  ):
         self.file_location = file_location
-        print(self.file_location)
         self.keyspace_name = keyspace_name
-        print(self.keyspace_name)
         self.table_name = table_name
 
 
     def create_cql_keyspace(self, keyspace_name):
-        cluster = Cluster()
-        session = cluster.connect()
+        session = self.__start_session()
         key = session.execute("""
                               CREATE KEYSPACE IF NOT EXISTS {}
                               WITH replication = {{ 'class': 'SimpleStrategy',
-                                                   'replication_factor': 3}};
+                                                   'replication_factor': 5}};
                               """ .format(keyspace_name))
 
 
     def create_table(self, headers, keyspace_name, table_name):
-        cluster = Cluster()
-        session = cluster.connect(keyspace_name)
+        session = self.__start_session()
         headers = ', '.join(headers)
         session.execute("""
                         CREATE TABLE IF NOT EXISTS {} ({});
@@ -66,6 +63,14 @@ class Rosmap(object):
         return (headers_with_types, headers_without_types)
 
 
+    def get_column(self, column):
+        session = self.__start_session()
+        num = session.execute("""
+                              SELECT {} FROM {}
+                              """.format(column, self.table_name))
+        return num
+
+
     def __get_insert_db_line(self, row):
         line_to_insert = []
         line_to_insert.append(row[0])
@@ -74,9 +79,25 @@ class Rosmap(object):
         return line_to_insert
 
 
+    def get_mean(self, column):
+        session = self.__start_session()
+        vals = session.execute("""
+                              SELECT {} FROM {}
+                              """.format(column, self.table_name)
+                              )
+        val_sum = 0.0
+        count = 0
+        for num in vals:
+            if(getattr(num, column, None) >= 0.0):
+                val_sum += getattr(num, column, None)
+                count += 1
+        if(count > 0):
+            return (val_sum/(float(count)))
+        return 0
+
     def load_data_file(self, file):
         rosmap =  pd.read_csv(file)
-        rosmap = rosmap.replace(np.nan, -1.0)
+        rosmap = rosmap.replace(np.nan, 0.0)
         return rosmap
 
 
@@ -85,8 +106,7 @@ class Rosmap(object):
                        keyspace_name,
                        rosmap,
                        table_name):
-        cluster = Cluster()
-        session = cluster.connect(keyspace_name)
+        session = self.__start_session()
         headers_without_types = ', '.join(headers_without_types)
         #import pdb; pdb.set_trace()
         for entry in range(0, len(rosmap.index)):
@@ -102,5 +122,22 @@ class Rosmap(object):
                                        headers_without_types,
                                        data_to_insert)
                             )
+
+
+    def __start_session(self):
+        cluster = Cluster()
+        session = cluster.connect(self.keyspace_name)
+        return session
+
+
+    def fix_grace_seconds(self):
+        session = self.__start_session()
+        session.execute("""
+                        ALTER TABLE {}
+                        WITH GC_GRACE_SECONDS = 0
+                        """.format(self.table_name))
+
+
+
 
 

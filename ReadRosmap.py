@@ -18,3 +18,4 @@ rosmap.populate_table(headers_without_types,
                       rosmap.keyspace_name,
                       rosmap_data,
                       rosmap.table_name)
+
