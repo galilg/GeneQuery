@@ -14,8 +14,9 @@ import Rosmap as rna
 #---- Main --------------------------------------------------------------------
 
 rosmap = rna.Rosmap()
+rosmap.get_column_std('diagnosis')
 #rosmap.calc_mean('diagnosis')
-average = rosmap.get_mean('diagnosis')
+#average = rosmap.get_mean('diagnosis')
 #print(average[0].system_avg_diagnosis)
 #print(average[0].col)
 #for x in average:

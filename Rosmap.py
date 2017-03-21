@@ -63,7 +63,7 @@ class Rosmap(object):
         return (headers_with_types, headers_without_types)
 
 
-    def get_column(self, column):
+    def get_columns(self, column):
         session = self.__start_session()
         num = session.execute("""
                               SELECT {} FROM {}
@@ -71,15 +71,7 @@ class Rosmap(object):
         return num
 
 
-    def __get_insert_db_line(self, row):
-        line_to_insert = []
-        line_to_insert.append(row[0])
-        for item in enumerate(row[1:]):
-            line_to_insert.append(item[1])
-        return line_to_insert
-
-
-    def get_mean(self, column):
+    def get_column_mean(self, column):
         session = self.__start_session()
         vals = session.execute("""
                               SELECT {} FROM {}
@@ -95,10 +87,38 @@ class Rosmap(object):
             return (val_sum/(float(count)))
         return 0
 
+
+    def get_column_std(self, column):
+        session = self.__start_session()
+        session.row_factory = self.pandas_factory
+        session.default_fetch_size = 10000000
+
+        rows = session.execute("""
+                               SELECT {}
+                               FROM {}""".format(column, self.table_name)
+                               )
+        df = rows._current_rows
+        df = df.loc[df[column] >= 0.0] # Weed out negative values from std
+        std = df.values.std(ddof=1)    # Negative values represent NaN vals
+        return std
+
+
+    def __get_insert_db_line(self, row):
+        line_to_insert = []
+        line_to_insert.append(row[0])
+        for item in enumerate(row[1:]):
+            line_to_insert.append(item[1])
+        return line_to_insert
+
+
     def load_data_file(self, file):
         rosmap =  pd.read_csv(file)
-        rosmap = rosmap.replace(np.nan, 0.0)
-        return rosmap
+        rosmap = rosmap.replace(np.nan, 0.0) # Set all NaN values to -1.0
+        return rosmap                        # RNA values are all positive
+
+
+    def pandas_factory(self, colnames, rows):
+        return pd.DataFrame(rows, columns=colnames)
 
 
     def populate_table(self,
@@ -130,14 +150,9 @@ class Rosmap(object):
         return session
 
 
-    def fix_grace_seconds(self):
-        session = self.__start_session()
-        session.execute("""
-                        ALTER TABLE {}
-                        WITH GC_GRACE_SECONDS = 0
-                        """.format(self.table_name))
-
-
-
-
-
+    #def fix_grace_seconds(self):
+    #    session = self.__start_session()
+    #    session.execute("""
+    #                    ALTER TABLE {}
+    #                    WITH GC_GRACE_SECONDS = 0
+    #                    """.format(self.table_name))
