@@ -14,8 +14,9 @@ class Biogrid(object):
 
     def connect_two_genes(self, tx, gene_a, gene_b):
 
-        tx.run("MERGE (a:Gene {entrez_id: $id_a})"
-               "MERGE (a)-[:INTERACTS_WITH]->(b:Gene {entrez_id: $id_b})",
+        tx.run("CREATE (a:Gene {entrez_id: $id_a})"
+               "CREATE (b:Gene {entrez_id: $id_b})"
+               "CREATE (a)-[:INTERACTS_WITH]->(b)",
                id_a=gene_a, id_b=gene_b)
 
 

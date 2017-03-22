@@ -16,19 +16,30 @@ def load_biogrid_file(file_location='../../BIOGRID-MV-Physical-3.4.144.tab2'):
 
 #---- Open Session ------------------------------------------------------------
 
-driver = GraphDatabase.driver("bolt://localhost:7687",
-                              auth=basic_auth("neo4j", "optiplex"))
-session = driver.session()
+#driver = GraphDatabase.driver("bolt://localhost:7687",
+#                              auth=basic_auth("neo4j", "optiplex"))
+#session = driver.session()
 
 #---- Main --------------------------------------------------------------------
 
 biogrid = Biogrid()
 df = load_biogrid_file()
+length_of_df = len(df)
+#for row in range(0, length_of_df):
+#    print(row)
+#print(df.iloc[0]['Entrez Gene Interactor A'])
+#print(len(df))
+for row in range(0, length_of_df):
+    driver = GraphDatabase.driver("bolt://localhost:7687",
+                              auth=basic_auth("neo4j", "optiplex"))
+    session = driver.session()
+    #import pdb; pdb.set_trace()
+    gene_a = df.iloc[row]['Entrez Gene Interactor A']
+    gene_b = df.iloc[row]['Entrez Gene Interactor B']
+    biogrid.connect_two_genes(session, str(gene_a), str(gene_b))
 
-print(df.iloc[0]['Entrez Gene Interactor A'])
-biogrid.connect_two_genes(session, '10999', '90634')
-
-biogrid.print_gene_names(session, '10999')
+#    print(row)
+#biogrid.print_gene_names(session, '10999')
 
 
 #---- Close Session -----------------------------------------------------------
