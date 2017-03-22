@@ -2,6 +2,8 @@
 
 #---- Imports -----------------------------------------------------------------
 
+from cassandra.cluster import Cluster
+
 import Rosmap as rna
 
 #---- Classes -----------------------------------------------------------------
@@ -25,6 +27,8 @@ class RNA_data(object):
 
 
     def mean_and_std(self, category, gene_id):
+        cluster = Cluster()
+        session = cluster.connect(self.rosmap.keyspace_name)
         column_name = 'entrez_id_' + str(gene_id)
         mean_and_std = self.rosmap.get_mean_and_std(category,
         return mean_and_std

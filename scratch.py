@@ -1,7 +1,7 @@
 #!/usr/bin/env
 
 #---- Imports -----------------------------------------------------------------
-import RNA_data as rd
+import RNA_data as rna
 
 #from cassandra.cluster import Cluster
 #
@@ -13,10 +13,9 @@ import RNA_data as rd
 #import Rosmap as rna
 #
 #---- Main --------------------------------------------------------------------
-rna_data = rd.RNA_data()
-entrez_9 = rna_data.mean_and_std('NCI', 1)
-print('''The mean of entrez_9 is : {}\n
-       The std of entrez_9 is : {} ''' .format(entrez_9[0], entrez_9[1]))
+rna_data = rna.RNA_data()
+entrez_9 = rna_data.mean_and_std('NCI', 9)
+print('''The mean of entrez_9 is : {}\nThe std of entrez_9 is : {} ''' .format(entrez_9[0], entrez_9[1]))
 #
 #rosmap = rna.Rosmap()
 #std_nci = rosmap.get_std('NCI', 'entrez_id_3')

@@ -26,8 +26,8 @@ class RNA_data(object):
 
     def mean_and_std(self, category, gene_id):
         #import pdb; pdb.set_trace()
-        cluster = Cluster()
-        session = cluster.connect(self.rosmap.keyspace_name)
+        cluster = Cluster(['127.0.0.1'])
+        session = cluster.connect('rosmap_rna')
         column_name = 'entrez_id_' + str(gene_id)
         mean_and_std = self.rosmap.get_mean_and_std(category, column_name)
         return mean_and_std

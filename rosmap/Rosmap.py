@@ -18,7 +18,7 @@ class Rosmap(object):
     '''
 
     def __init__(self,
-                 file_location = '../ROSMAP_RNASeq_entrez.csv',
+                 file_location = '../../ROSMAP_RNASeq_entrez.csv',
                  keyspace_name = "rosmap_rna",
                  table_name = 'patient_diagnosis'
                  ):
@@ -27,12 +27,12 @@ class Rosmap(object):
         self.table_name = table_name
 
     def create_cql_keyspace(self):
-        cluster = Cluster()
+        cluster = Cluster(['127.0.0.1'])
         session = cluster.connect()
         session.execute("""
                               CREATE KEYSPACE IF NOT EXISTS {}
                               WITH replication = {{ 'class': 'SimpleStrategy',
-                                                   'replication_factor': 5}};
+                                                   'replication_factor': 12}};
                               """ .format(self.keyspace_name))
 
 
@@ -82,6 +82,7 @@ class Rosmap(object):
 
     def get_mean_and_std(self, category, column):
         #import pdb; pdb.set_trace()
+        session = self.__start_session()
         group = category.upper()
         if (group == 'NCI'):
             lower_bound, upper_bound = 0.0, 2.0
@@ -138,6 +139,6 @@ class Rosmap(object):
 
 
     def __start_session(self):
-        cluster = Cluster()
+        cluster = Cluster(['127.0.0.1'])
         session = cluster.connect(self.keyspace_name)
         return session
