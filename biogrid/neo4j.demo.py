@@ -10,18 +10,17 @@ import pandas as pd
 
 #---- Main --------------------------------------------------------------------
 
-driver = GraphDatabase.driver("bolt://localhost:7687",
-                               auth=basic_auth("neo4j", "optiplex"))
-session = driver.session()
+driver = GraphDatabase.driver("bolt://localhost:7687", auth=basic_auth("neo4j", "optiplex"))
+session2 = driver.session()
 
-session.run("CREATE (a:Person {name: {name}, title: {title}})",
+session2.run("CREATE (a:Person {name: {name}, title: {title}})",
             {"name": "Arthur", "title": "King"})
 
-result = session.run("MATCH (a:Person) WHERE a.name = {name} "
+result = session2.run("MATCH (a:Person) WHERE a.name = {name} "
                      "RETURN a.name AS name, a.title AS title",
                      {"name": "Arthur"})
 
 for record in result:
     print("{} {}" .format(record["title"], record["name"]))
 
-session.close()
+session2.close()

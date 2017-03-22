@@ -2,44 +2,45 @@
 
 #---- Imports -----------------------------------------------------------------
 
+from Biogrid import Biogrid
 from neo4j.v1 import GraphDatabase, basic_auth
 
 import pandas as pd
 
-#---- Public Classes ----------------------------------------------------------
+#---- Functions ---------------------------------------------------------------
 
-class Biogrid(object):
-    def __init__(self, file_location= \
-                            '../../BIOGRID-MV-Physical-3.4.144.tab2'):
-        self.biogrid_df = pd.read_csv(file_location, sep'\t', header=(0))
+def load_biogrid_file(file_location='../../BIOGRID-MV-Physical-3.4.144.tab2'):
+    biogrid_df = pd.read_csv(file_location, sep='\t', header=(0))
+    return biogrid_df
 
-    def connect_two_genes(self, gene_a, gene_b):
-        session = self.__start_session()
-        session.run("CREATE (a:Gene {entrez_id: {{}}})".format(gene_a)
-                    "CREATE (b:Gene {entrez_id: {{}}})".format(gene_b)
-                    "CREATE (a)-[r:interacts_with]->(b)")
 
-    def __start_session(self):
-        driver = GraphDatabase.driver("bolt://localhost:7687",
-                                            auth=basic_auth("neo4j", "optiplex")
-                                          )
-        session = driver.session()
-        return session
-#---- Main --------------------------------------------------------------------
+def start_session(bolt_port='bolt://localhost:7687',
+                  username='neo4j',
+                  password='optiplex'):
+    driver = GraphDatabase.driver(bolt_port,
+                                  auth=basic_auth(username, password))
+    session = driver.session()
+    return session
+
+
+#---- Open Session ------------------------------------------------------------
 
 driver = GraphDatabase.driver("bolt://localhost:7687",
                                auth=basic_auth("neo4j", "optiplex"))
 session = driver.session()
 
 
-session.run("CREATE (a:Person {name: {name}, title: {title}})",
-            {"name": "Arthur", "title": "King"})
+#---- Main --------------------------------------------------------------------
 
-result = session.run("MATCH (a:Person) WHERE a.name = {name} "
-                     "RETURN a.name AS name, a.title AS title",
-                     {"name": "Arthur"})
+biogrid = Biogrid()
+df = load_biogrid_file()
 
-for record in result:
-    print("{} {}" .format(record["title"], record["name"]))
+print(df.iloc[0]['Entrez Gene Interactor A'])
+#biogrid.connect_two_genes(session, '10999', '90634')
+
+#biogrid.print_gene_names(session, '10999')
+
+
+#---- Close Session -----------------------------------------------------------
 
 session.close()
