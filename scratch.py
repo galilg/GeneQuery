@@ -14,8 +14,14 @@ import Rosmap as rna
 #---- Main --------------------------------------------------------------------
 
 rosmap = rna.Rosmap()
-rosmap.get_column_std('diagnosis')
-#rosmap.calc_mean('diagnosis')
+std_nci = rosmap.get_std('NCI', 'entrez_id_3')
+std_mci = rosmap.get_std('MCI', 'entrez_id_3')
+std_ad = rosmap.get_std('AD', 'entrez_id_3')
+std_others = rosmap.get_std('OTHERS', 'entrez_id_3')
+print("MEAN: {}\nSTD NCI: {}".format(std_nci[0], std_nci[1]))
+print("MEAN: {}\nSTD MCI: {}".format(std_mci[0], std_mci[1]))
+print("MEAN: {}\nSTD AD: {}".format(std_ad[0], std_ad[1]))
+print("MEAN: {}\nSTD OTHERS: {}".format(std_others[0], std_others[1]))
 #average = rosmap.get_mean('diagnosis')
 #print(average[0].system_avg_diagnosis)
 #print(average[0].col)

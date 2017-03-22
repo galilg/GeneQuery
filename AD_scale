@@ -1,0 +1,13 @@
+Working on Your Data
+AD/MCI/NCI gene
+expression profile
+RNA concentration of each gene in an individual
+File: ROSMAP_RNASeq_Entrez.csv
+1 st column: patient id
+2 nd column: diagnosis
+3 rd last: genes
+Diagnosis labels
+1 : No cognitive impairment (NCI)
+2, 3 Mild cognitive impairment (MCI)
+4, 5 : Alzheimer’s disease (AD)
+6 : Others

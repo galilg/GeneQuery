@@ -63,44 +63,38 @@ class Rosmap(object):
         return (headers_with_types, headers_without_types)
 
 
-    def get_columns(self, column):
-        session = self.__start_session()
-        num = session.execute("""
-                              SELECT {} FROM {}
-                              """.format(column, self.table_name))
-        return num
-
-
-    def get_column_mean(self, column):
-        session = self.__start_session()
-        vals = session.execute("""
-                              SELECT {} FROM {}
-                              """.format(column, self.table_name)
-                              )
-        val_sum = 0.0
-        count = 0
-        for num in vals:
-            if(getattr(num, column, None) >= 0.0):
-                val_sum += getattr(num, column, None)
-                count += 1
-        if(count > 0):
-            return (val_sum/(float(count)))
-        return 0
-
-
-    def get_column_std(self, column):
+    def __get_column_df(self, column, lower_bound, upper_bound):
         session = self.__start_session()
         session.row_factory = self.pandas_factory
         session.default_fetch_size = 10000000
-
         rows = session.execute("""
                                SELECT {}
-                               FROM {}""".format(column, self.table_name)
+                               FROM {}
+                               WHERE diagnosis >= {}
+                               and diagnosis < {}
+                               ALLOW FILTERING
+                               """.format(column,
+                                          self.table_name,
+                                          lower_bound,
+                                          upper_bound)
                                )
         df = rows._current_rows
-        df = df.loc[df[column] >= 0.0] # Weed out negative values from std
-        std = df.values.std(ddof=1)    # Negative values represent NaN vals
-        return std
+        return df
+
+
+    def get_std(self, category, column):
+        #import pdb; pdb.set_trace()
+        if (category == 'NCI'):
+            lower_bound, upper_bound = 0.0, 2.0
+        elif (category == 'MCI'):
+            lower_bound, upper_bound = 2.0, 4.0
+        elif (category == 'AD'):
+            lower_bound, upper_bound = 4.0, 6.0
+        else:
+            lower_bound, upper_bound = 6.0, 10.0
+
+        df = self.__get_column_df(column, lower_bound, upper_bound)
+        return [df.values.mean(), df.values.std(ddof=1)]
 
 
     def __get_insert_db_line(self, row):
@@ -148,11 +142,3 @@ class Rosmap(object):
         cluster = Cluster()
         session = cluster.connect(self.keyspace_name)
         return session
-
-
-    #def fix_grace_seconds(self):
-    #    session = self.__start_session()
-    #    session.execute("""
-    #                    ALTER TABLE {}
-    #                    WITH GC_GRACE_SECONDS = 0
-    #                    """.format(self.table_name))
