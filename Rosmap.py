@@ -1,5 +1,3 @@
-#!/usr/bin/env
-
 #---- Imports -----------------------------------------------------------------
 
 from cassandra.cluster import Cluster
@@ -27,15 +25,16 @@ class Rosmap(object):
         self.file_location = file_location
         self.keyspace_name = keyspace_name
         self.table_name = table_name
+        return self
 
-
-    def create_cql_keyspace(self, keyspace_name):
-        session = self.__start_session()
-        key = session.execute("""
+    def create_cql_keyspace(self):
+        cluster = Cluster()
+        session = cluster.connect()
+        session.execute("""
                               CREATE KEYSPACE IF NOT EXISTS {}
                               WITH replication = {{ 'class': 'SimpleStrategy',
                                                    'replication_factor': 5}};
-                              """ .format(keyspace_name))
+                              """ .format(self.keyspace_name))
 
 
     def create_table(self, headers, keyspace_name, table_name):
@@ -82,13 +81,14 @@ class Rosmap(object):
         return df
 
 
-    def get_std(self, category, column):
+    def get_mean_and_std(self, category, column):
         #import pdb; pdb.set_trace()
-        if (category == 'NCI'):
+        group = category.upper()
+        if (group == 'NCI'):
             lower_bound, upper_bound = 0.0, 2.0
-        elif (category == 'MCI'):
+        elif (group == 'MCI'):
             lower_bound, upper_bound = 2.0, 4.0
-        elif (category == 'AD'):
+        elif (group == 'AD'):
             lower_bound, upper_bound = 4.0, 6.0
         else:
             lower_bound, upper_bound = 6.0, 10.0
