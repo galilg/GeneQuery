@@ -1,0 +1,35 @@
+Alzheimer's Disease Gene Query Program
+Author: Galil Gertner
+
+Goal:
+    To find and create the correct database for each of the input files and
+    data types.
+
+Tasks:
+    1. Create a database for all of the gene values for a sample of patients on
+       the scale of no alzheimers disease to full alzheimers disease, and
+       create the ability for the user to query the mean values for those genes
+       and standard deviation from the mean among the sample patients.
+    2. Create a database of the patients, their age, sex, and level of education
+    3. Create a database detailing all of the gene's relations to other genes.
+    4. Create a database detailing all of the information we know of a
+       particular gene.
+
+Synopsis:
+
+    1. Created and functional. I chose to use cassandra for the database
+       because it can
+       accomodate that many columns.
+       In order to access the information given in the ROSMAP file as a
+    2. I loaded this into a classic SQL database because it seems to fit the
+       mold, but I did not get to provide query functionality yet.
+    3. I have created a python script that can load all of the relations in
+       the BIOGRID map exceptionally fast -- in under a minute into neo4j
+       detailing the relations between the genes, but I have yet
+       to to create the query classes correctly.
+    4. I though this model would work exceptionally well as a mongoDB collection
+       The information is not normalized, therefore a traditional SQL table
+       is a poor choice.  Also, it is in XML format, for which there are
+       standard conversions to JSON.  Once it is in JSON format, it is already
+       in mongo format. I have not made any progress in creating this database
+       aside from deciding which one is appropriate for it.
