@@ -8,19 +8,25 @@ import Rosmap as rna
 
 class RNA_data(object):
     def __init__(self):
-        #import pdb; pdb.set_trace()
         self.rosmap = rna.Rosmap()
+        self.file_location = self.rosmap.file_location
 
-        self.rosmap_data = self.rosmap.load_data_file(self.rosmap.file_location)
+
+    def load_rna_data(self, file=None):
+        if file is None:
+            rosmap_data = self.rosmap.load_data_file(self.file_location)
+        else:
+            rosmap_data = self.rosmap.load_data_file(file)
+
         headers_with_types, headers_without_types = \
-                                    self.rosmap.get_headers(self.rosmap_data)
+                                    self.rosmap.get_headers(rosmap_data)
         self.rosmap.create_cql_keyspace()
         self.rosmap.create_table(headers_with_types,
                             self.rosmap.keyspace_name,
                             self.rosmap.table_name)
         self.rosmap.populate_table(headers_without_types,
                               self.rosmap.keyspace_name,
-                              self.rosmap_data,
+                              rosmap_data,
                               self.rosmap.table_name)
 
 

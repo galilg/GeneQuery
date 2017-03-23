@@ -15,7 +15,7 @@ cluster = Cluster(['127.0.0.1'])
 session = cluster.connect('rosmap_rna')
 
 rna_data = rna.RNA_data()
-
+rna_data.load_rna_data()
 ###############################################################################
 # Find the mean and standard deviation of an entrez id among patients:        #
 #                                                                             #
