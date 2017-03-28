@@ -33,25 +33,3 @@ def open_entrez_id_file(file):
             data.append(line.split("HUMAN"))
 
     return data
-
-
-def save_to_csv_file(cleaned_data):
-    with open('../entrez_id.csv', 'w') as outfile:
-        header = "entrez_id,uniprot_id,gene_name,description"
-        outfile.write(header)
-        outfile.write('\n')
-        for line in cleaned_data:
-            for word in line:
-                if word == line[-1]:
-                    outfile.write(word)
-                else:
-                    outfile.write(word + ",")
-            outfile.write('\n')
-
-
-#---- Main --------------------------------------------------------------------
-
-file_path = '../entrez_id_uniprot_mapping'
-data = open_entrez_id_file(file_path)
-csv_data = convert_data_to_csv_format(data)
-save_to_csv_file(csv_data)
