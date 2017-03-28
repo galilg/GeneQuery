@@ -12,7 +12,7 @@ def display_menu():
 |                                                                             |
 |                                  TO                                         |
 |                                                                             |
-|                                                                             | |                     The Alzheimer's Disease Database                        |
+|                       The Alzheimer's Disease Database                      |
 |                                                                             |
 |                                                                             |
 |                                                                             |

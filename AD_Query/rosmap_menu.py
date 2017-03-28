@@ -7,8 +7,9 @@ import sys
 def display_menu():
     print(
 """
-1 - Get mean value and standard deviation of a gene in database
-2 - Return to main menu
+1 - Load csv file into the database
+2 - Get mean value and standard deviation of a gene in database
+3 - Return to main menu
 """)
     command = input("Please select: ")
     return command
@@ -16,19 +17,21 @@ def display_menu():
 def call_rosmap_gene_stats():
     command = True
     rna_data = rna.RNA_data()
-    print("Enter the filepath where the ROSMAP file is located? \n"
-          "Choose N to use the default filepath (notrecommended).")
-    has_file = input("Y/N: ")
-    if (has_file.lower() == 'y'):
-        file = input("File name: ")
-    else:
-        file = None
-    print("Loading RNA data into database ...")
-    rna_data.load_rna_data(file)
     while (command):
 
         command = display_menu()
         if (command == '1'):
+            print("Enter the filepath where the ROSMAP file is located? \n"
+                  "Choose N to use the default filepath (notrecommended).")
+            has_file = input("Y/N: ")
+            if (has_file.lower() == 'y'):
+                file = input("File name: ")
+            else:
+                file = None
+            print("Loading RNA data into database ...")
+            rna_data.load_rna_data(file)
+
+        elif (command == '2'):
             entrez_id = 's'
             while not(entrez_id.isdigit()):
                 entrez_id = input( \
@@ -50,5 +53,5 @@ def call_rosmap_gene_stats():
                                 .format(entrez_id, m_and_s[0]))
                 print("The standard deviation for entrez id {} is: {}"
                                 .format(entrez_id, m_and_s[1]))
-        elif(command == '2'):
+        elif(command == '3'):
             command = False
