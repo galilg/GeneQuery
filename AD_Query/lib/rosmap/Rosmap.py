@@ -18,7 +18,7 @@ class Rosmap(object):
     '''
 
     def __init__(self,
-                 file_location = 'ROSMAP_RNASeq_entrez.csv',
+                 file_location = '/Users/galil/src/ad_gene_query/AD_Query/input_data/ROSMAP_RNASeq_entrez.csv',
                  keyspace_name = "rosmap_rna",
                  table_name = 'patient_diagnosis'
                  ):

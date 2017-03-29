@@ -4,7 +4,7 @@ import xml.etree.ElementTree as ET
 from lxml import etree
 import pandas as pd
 
-xml_data = '../uniprot-human.xml'
+xml_data = '../../input_data/uniprot-human.xml'
 
 def xml2df(xml_data):
     tree = ET.parse(xml_data)
