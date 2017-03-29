@@ -3,15 +3,17 @@
 #---- Imports -----------------------------------------------------------------
 
 import redis
-import entrez_uniprot_to_csv_map_only as e2u
-
+from . import import_entrez as e2u
 #---- Public Classes ----------------------------------------------------------
 
 class EntrezUniprotMap(object):
 
-    def __init__(self, entrez_file):
+    def __init__(self, entrez_file=None):
+        if entrez_file is None:
+            self.__entrez_file = '/Users/galil/src/ad_gene_query/AD_Query/input_data/e2u_map'
+        else:
+            self.__entrez_file = entrez_file
         self.__e2u_map = redis.StrictRedis()
-        self.__entrez_file = entrez_file
         self.__csv_data = []
 
 

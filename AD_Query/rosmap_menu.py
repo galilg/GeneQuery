@@ -1,6 +1,6 @@
 #---- Imports -----------------------------------------------------------------
 
-import lib.rosmap.RNA_data as rna
+import lib.rosmap.RNA_data as RNA
 import sys
 
 #---- Funcions ----------------------------------------------------------------
@@ -14,9 +14,10 @@ def display_menu():
     command = input("Please select: ")
     return command
 
+
 def call_rosmap_gene_stats():
     command = True
-    rna_data = rna.RNA_data()
+    rna_data = RNA.RNA_data()
     while (command):
 
         command = display_menu()

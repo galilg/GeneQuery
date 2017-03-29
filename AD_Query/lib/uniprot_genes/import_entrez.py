@@ -1,5 +1,3 @@
-#!/usr/bin/env
-
 #---- Imports -----------------------------------------------------------------
 
 import re
@@ -17,7 +15,8 @@ def convert_data_to_csv_format(data):
             gene_name[0] = gene_name[0].lstrip()
             gene_name[0] = re.sub(r',', '', gene_name[0])
             gene_name[1] = gene_name[1][:-2]
-            new_line = [ids[0],ids[1],gene_name[1],gene_name[0]]
+            #new_line = [ids[0],ids[1],gene_name[1],gene_name[0]]
+            new_line = [ids[0],ids[1]]
             csv_data.append(new_line)
     return csv_data
 
@@ -33,3 +32,4 @@ def open_entrez_id_file(file):
             data.append(line.split("HUMAN"))
 
     return data
+

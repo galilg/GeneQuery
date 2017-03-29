@@ -31,7 +31,9 @@ cursor.execute(sql)
 #         `education` VARCHAR(3) COLLATE utf8_bin  NOT NULL
 #          PRIMARY KEY (`patient_id`)
 #)Engine = InnoDB  DEFAULT CHARSER=utf8 COLLATE=utf8_bin''')
-sql='''CREATE TABLE IF NOT EXISTS patients_data (
+
+sql='''
+      CREATE TABLE IF NOT EXISTS patients_data (
       patient_id VARCHAR(11) DEFAULT NULL,
       age int(11) DEFAULT NULL,
       gender VARCHAR(2) DEFAULT NULL,
@@ -43,7 +45,7 @@ import csv
 #with open('/home/galil/src/genes/gene-env/patients.csv', 'r') as csv_file:
 #    csv_data = csv.reader(csv_file)
 #    next(csv_data)
-csv_data=csv.reader(open('/home/galil/src/genes/gene-env/patients.csv'))
+csv_data=csv.reader(open('/Users/galil/src/ad_gene_query/AD_Query/input_data/patients.csv'))
 next(csv_data, None)
 for row in csv_data:
     sql=""" INSERT INTO patients_data (patient_id, age, gender, education) VALUES(%s, %s, %s, %s)"""

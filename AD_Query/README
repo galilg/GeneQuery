@@ -8,7 +8,9 @@ This program uses the following:
     - Cassandra
     - neo4j (neo4j-driver)
     - mySQL
+        - pymysql
     - etree
+    - redis
 
 Goal:
     To find and create the correct database for each of the input files and
