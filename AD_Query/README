@@ -1,15 +1,22 @@
 Alzheimer's Disease Gene Query Program
 Author: Galil Gertner
-Date: 3.22.17
+Date: 3.29.17
+
+To run:
+python3 AD_Query.py (Entry point)
 
 Requirments:
 
 This program uses the following:
+    - Python 3.5.1
     - Cassandra
-    - neo4j (neo4j-driver)
+    - neo4j
+        - neo4j-driver
     - mySQL
         - pymysql
-    - etree
+    - monggodb
+        - pymongo, pymongo.MongoClient
+        - xmltodict
     - redis
 
 Goal:
@@ -35,15 +42,11 @@ Synopsis:
        accomodate that many columns.
        In order to access the information given in the ROSMAP file as a
     2. I loaded this into a classic SQL database because it seems to fit the
-       mold, but I did not get to provide query functionality yet.
+       mold. Functions well.
     3. I have created a python script that can load all of the relations in
        the BIOGRID map exceptionally fast -- in under a minute into neo4j
        detailing the relations between the genes, but I have yet
        to to create the query classes correctly.
-    4. I though this model would work exceptionally well as a mongoDB
-       collection The information is not normalized, therefore a
-       traditional SQL table is a poor choice.  Also, it is in XML
-       format, for which there are standard conversions to JSON.
-       Once it is in JSON format, it is already in mongo format.
-       I have not made any progress in creating this database aside
-       from deciding which one is appropriate for it.
+    4. Implemented as a mongoDB query.  Takes the xml, converts it to a
+       dict, then to JSON, and loads while streaming into mongoDB
+       into a database called uniprot, collection called genes.
