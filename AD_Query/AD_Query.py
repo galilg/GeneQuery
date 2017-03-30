@@ -31,7 +31,7 @@ while(command):
     elif(command == '4'):
         rosmap_menu.call_rosmap_gene_stats()
 
-    elif(command == '5'):
+    elif(command == 'q'):
         command = False
     else:
         command = True

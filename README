@@ -1,0 +1,19 @@
+To start cassandra:
+    brew services start cassandra
+    To stop:
+        brew services stop cassandra
+
+To start neo4j:
+    neo4j start
+    To test:
+    neo4j status
+    To stop:
+    neo4j stop
+
+To start redis:
+    In folder wtih symbolic link redis@:
+        redis-server redis
+    To test if redis is running:
+        redis-cli ping, PONG should respond
+
+

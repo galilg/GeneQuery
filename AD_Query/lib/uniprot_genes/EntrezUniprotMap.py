@@ -24,6 +24,7 @@ class EntrezUniprotMap(object):
     def add_key_value(self, key, value):
         self.__e2u_map.lpush(key, value)
 
+
     def __convert_input_to_csv(self):
         data = e2u.open_entrez_id_file(self.__entrez_file)
         self.__csv_data = e2u.convert_data_to_csv_format(data)

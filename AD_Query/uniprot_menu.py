@@ -1,5 +1,7 @@
 #---- Imports -----------------------------------------------------------------
 
+from lib.uniprot_genes.UniprotQuery import UniprotQuery
+
 import lib.uniprot_genes.EntrezUniprotMap  as e2u_map
 import sys
 
@@ -29,10 +31,25 @@ def call_uniprot_gene_stats():
                 entrez_file = None
             map = e2u_map.EntrezUniprotMap(entrez_file)
             map.load_csv_to_redis()
+            u_query = UniprotQuery()
+            import pdb; pdb.set_trace()
+            u_query.load_uniprot_xml('/Users/galil/src/uniprot-human.xml')
             # Add here loading the actual XML into the database
 
         elif (command == '2'):
-            pass
+            subcommand = True
+            while(subcommand):
+                u_query = UniprotQuery()
+                map = e2u_map.EntrezUniprotMap()
+                subcommand = input("Enter entrez id (q to quit): ")
+                #import pdb; pdb.set_trace()
+                if (subcommand == 'q'):
+                    subcommand = False
+                #print("Values: ", map.get_values(subcommand))
+                uniprot_ids = map.get_values(subcommand)
+                for gene in uniprot_ids:
+                    print(u_query.get_gene_data(gene))
+
 
         elif (command == 'q'):
             command = False

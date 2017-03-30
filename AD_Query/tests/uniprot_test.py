@@ -2,7 +2,7 @@
 
 #---- Imports -----------------------------------------------------------------
 
-from ..lib.uniprot_genes.UniprotQuery import UniprotQuery
+import lib.uniprot_genes.UniprotQuery.UniprotQuery
 
 
 #---- Main --------------------------------------------------------------------

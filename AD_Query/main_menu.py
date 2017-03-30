@@ -7,7 +7,7 @@ import sys
 def display_menu():
     print(
 """
-------------------------------------------------------------------------------|
+-------------------------------------------------------------------------------
 |                                WELCOME                                      |
 |                                                                             |
 |                                  TO                                         |
@@ -19,11 +19,11 @@ def display_menu():
 |                                                                             |
 | Select from the following options:                                          |
 |                                                                             |
-| 1 - AD patient information                                                  |
-| 2 - Gene information                                                        |
-| 3 - Interacting genes                                                       |
-| 4 - Gene statistics among AD patients                                       |
-| 5 - Exit program                                                            |
+| 1 - AD patient information                         (patients.csv / mySQL)   |
+| 2 - Gene information       (entrez->uniprot & uniprot.xml / redis & mongo)  |
+| 3 - Interacting genes                              (Biogrid.tab2 / neo4j)   |
+| 4 - Gene statistics among AD patient             (Rosmap.csv / Cassandra)   |
+| q - Exit program                                                            |
 -------------------------------------------------------------------------------
 """)
     command = input("Please select: " )

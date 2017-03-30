@@ -5,6 +5,7 @@
 from pymongo import MongoClient
 
 import json
+import pprint
 import pymongo
 import xmltodict
 
@@ -20,13 +21,17 @@ class UniprotQuery(object):
 
 
     def get_gene_data(self, uniprot_id):
-        return self.entries.findOne({'name': uniprot_id})
+        #import pdb; pdb.set_trace()
+        client = MongoClient('localhost', 27017)
+        db = client.uniprot
+        collection = db.genes
+        return pprint.pprint(self.entries.find_one({'name': uniprot_id}))
 
     def load_entry_to_mongo(self, _, entry):
         item = json.dumps(entry, indent=4)
-        json_item = json.loads(entry)
+        json_item = json.loads(item)
         result = self.entries.insert_one(json_item)
-        print('One item: {}' .format(result.inserted_id))
+        print('Item entered into mongo: {}' .format(result.inserted_id))
         return True
 
     def load_uniprot_xml(self, xml_file, xml_attribs=True):
