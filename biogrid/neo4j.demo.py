@@ -10,7 +10,7 @@ import pandas as pd
 
 #---- Main --------------------------------------------------------------------
 
-driver = GraphDatabase.driver("bolt://localhost:7687", auth=basic_auth("neo4j", "optiplex"))
+driver = GraphDatabase.driver("bolt://127.0.0.1:7687", auth=basic_auth("neo4j", "optiplex"))
 session2 = driver.session()
 
 session2.run("CREATE (a:Person {name: {name}, title: {title}})",

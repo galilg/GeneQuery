@@ -42,7 +42,7 @@ def call_uniprot_gene_stats():
                 u_query = UniprotQuery()
                 map = e2u_map.EntrezUniprotMap()
                 subcommand = input("Enter entrez id (q to quit): ")
-                #import pdb; pdb.set_trace()
+                import pdb; pdb.set_trace()
                 if (subcommand == 'q'):
                     subcommand = False
                 #print("Values: ", map.get_values(subcommand))

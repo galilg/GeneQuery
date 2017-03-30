@@ -9,8 +9,16 @@ import pandas as pd
 
 class Biogrid(object):
     def __init__(self):
+        self.driver = GraphDatabase.driver("bolt://127.0.0.1:7687",
+                                           auth=basic_auth(
+                                                "neo4j",
+                                                "optiplex"))
+        self.session = self.driver.session()
         return None
 
+    def add_entry(self, tx, name):
+        tx.run("CREATE(a:Thing {name: {name}, title: 'Giant'})",
+                {'name': name})
 
     def connect_two_genes(self, tx, gene_a, gene_b):
 
@@ -19,12 +27,30 @@ class Biogrid(object):
                "CREATE (a)-[:interacts]->(b)",
                id_a=gene_a, id_b=gene_b)
 
+    def get_entry(self, tx, name):
+        pass
 
-    def get_n_degree_interacting_genes(self, gene, n):
-        tx.run("MATCH (:Gene)-[:interacts*..$degrees]->(b:Gene) "
-               "WHERE b.enterez_id = $gene_id "
-               "RETURN b",
-               degrees=n, gene_id=gene)
+
+    def get_n_degree_interacting_genes(self, tx, gene, n):
+        driver = GraphDatabase.driver("bolt://127.0.0.1:7687",
+                                     auth=basic_auth("neo4j", "optiplex"))
+        session = driver.session()
+        #session.run("CREATE (a:Person {name: {name}, title: {title}})",
+        #              {"name": "Arthur", "title": "King"})
+        #result = session.run("MATCH (a:Person) WHERE a.name = {name} "
+        #                       "RETURN a.name AS name, a.title AS title",
+        #                       {"name": "Arthur"})
+        #for record in result:
+        #    print("%s %s" % (record["title"], record["name"]))
+
+
+        result = tx.run("MATCH (b:Gene) "
+               "WHERE b.entrez_id = {gene_id} "
+               "RETURN b", {'gene_id': gene})
+        #for record in result:
+        #    print(record['entrez_id'])
+        #    #print("{}".format(record['entrez_id']))
+        return result
 
 
     def convert_biogrid_to_csv(self, file_path):
