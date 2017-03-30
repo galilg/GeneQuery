@@ -32,7 +32,7 @@ def call_uniprot_gene_stats():
             map = e2u_map.EntrezUniprotMap(entrez_file)
             map.load_csv_to_redis()
             u_query = UniprotQuery()
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             u_query.load_uniprot_xml('/Users/galil/src/uniprot-human.xml')
             # Add here loading the actual XML into the database
 
@@ -42,7 +42,7 @@ def call_uniprot_gene_stats():
                 u_query = UniprotQuery()
                 map = e2u_map.EntrezUniprotMap()
                 subcommand = input("Enter entrez id (q to quit): ")
-                import pdb; pdb.set_trace()
+                #import pdb; pdb.set_trace()
                 if (subcommand == 'q'):
                     subcommand = False
                 #print("Values: ", map.get_values(subcommand))

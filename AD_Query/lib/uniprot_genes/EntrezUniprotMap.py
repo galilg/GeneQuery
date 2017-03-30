@@ -10,7 +10,7 @@ class EntrezUniprotMap(object):
 
     def __init__(self, entrez_file=None):
         if entrez_file is None:
-            self.__entrez_file = '/Users/galil/src/ad_gene_query/AD_Query/input_data/e2u_map'
+            self.__entrez_file = '/Users/galil/src/ad_gene_query/input_data/e2u_map'
         else:
             self.__entrez_file = entrez_file
         self.__e2u_map = redis.StrictRedis()

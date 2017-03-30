@@ -16,7 +16,7 @@ class Patients(object):
         self.__patients_db = None
         if csv_file is None:
             self.__csv_file = \
-              '/Users/galil/src/ad_gene_query/AD_Query/input_data/patients.csv'
+              '/Users/galil/src/ad_gene_query/input_data/patients.csv'
         else:
             self.__csv_file = csv_file
 
